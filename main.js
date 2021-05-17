@@ -67,8 +67,39 @@ inputField.addEventListener("keyup", (event)=>{
     if (event.key === "Enter"){
         async function getInfo() {
             const input = inputField.value;
-            const query = await axios.get(`https://restcountries.eu/rest/v2/name/${input}`);
-            console.log(query);
+            const response = await axios.get(`https://restcountries.eu/rest/v2/name/${input}`);
+            console.log(response);
+
+            //CREATED IMAGE CONATINER DIV NODE ELEMENT.
+            const imageContainer = document.getElementById("img-container");
+
+            //create IMG element
+            const image = document.createElement("img");
+            image.src = (response.data[0].flag); // this is the place where the flag image is. OT REFERS TO THE AXIOS GET METHOD AND THE LOCATION OF THE FLAG URL.
+            imageContainer.appendChild(image); // APPENDING THIS IMAGE TO THE IMAGE CONTAINER MADE EARLIER.
+
+            const countryName = document.createElement("h2");
+            countryName.innerText = `${response.data[0].name}`;
+            imageContainer.append(countryName);
+
+            // create P element for more data returned
+            const countryInfo = document.createElement("p");
+            countryInfo.innerText = `${response.data[0].name} is situated in ${response.data[0].region}. It has a population of ${response.data[0].population} people.`;
+            imageContainer.appendChild(countryInfo);
+
+            const moreCountryInfo = document.createElement("p");
+            moreCountryInfo.innerText = `The capital is ${response.data[0].capital} and you can pay with ${response.data[0].currencies[0].name}.`;
+            imageContainer.appendChild(moreCountryInfo);
+
+            // Another P element for languages spoken
+            const languagesInfo = document.createElement("p");
+            languagesInfo.innerText = `They speak ${response.data[0].languages[0].name}.`;
+            imageContainer.appendChild(languagesInfo);
+
+            //Attempt at making error message if no valid country not entered
+            if (inputField.value !== response.data[0].name){
+               console.log("Not a valid country!");
+            }
         }
         getInfo();
     }
