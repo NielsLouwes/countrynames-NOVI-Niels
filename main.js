@@ -9,8 +9,8 @@ const searchButton = document.getElementById("button");
 // 2. ADDED AN EVENT LISTENER TO BUTTON NODE ELEMENT
 // 3. ASYNC FUNCTION SETTING A VARIABLE EQUAL TO AWAIT AND AXIOS FOR GETTING THE INFORMATION FROM THE API LINK
 // 4.
-searchButton.addEventListener("click",  () =>{
-    async function getBelgium() {
+searchButton.addEventListener("click", () => {
+    async function getCountryInfo() {
         const response = await axios.get("https://restcountries.eu/rest/v2/name/sweden");
         console.log(response);
         console.log(response.data[0].flag); //response of API // we need to look at URL van plaatje.
@@ -22,44 +22,96 @@ searchButton.addEventListener("click",  () =>{
         image.src = (response.data[0].flag); // this is the place where the flag image is. OT REFERS TO THE AXIOS GET METHOD AND THE LOCATION OF THE FLAG URL.
         imageContainer.appendChild(image); // APPENDING THIS IMAGE TO THE IMAGE CONTAINER MADE EARLIER.
 
+        const countryName = document.createElement("h2");
+        countryName.innerText = `${response.data[0].name}`;
+        imageContainer.append(countryName);
+
         // create P element for more data returned
         const countryInfo = document.createElement("p");
         countryInfo.innerText = `${response.data[0].name} is situated in ${response.data[0].region}. It has a population of ${response.data[0].population} people.`;
         imageContainer.appendChild(countryInfo);
 
-        //Another P element for more information
+        //Another P element for capital and currencies
+        // Bonusopdracht: Maak een functie die ongeacht het aantal talen die in een land gesproken worden, een string maakt:
+        //
+        //     1 taal: They speak [language]
+        // 2 talen: They speak [language] and [language]
+        // 3 talen: They speak [language], [language] and [language]
+        // etc.
+
+        // We need to place this inside a loop.
+
         const moreCountryInfo = document.createElement("p");
-        const currencies = response.data[0].currencies[0];
-        moreCountryInfo.innerText = `The capital is ${response.data[0].capital} and you can pay with ${response.data[0].currencies}`;
+        moreCountryInfo.innerText = `The capital is ${response.data[0].capital} and you can pay with ${response.data[0].currencies[0].name}.`;
         imageContainer.appendChild(moreCountryInfo);
 
+        // Another P element for languages spoken
+        const languagesInfo = document.createElement("p");
+        languagesInfo.innerText = `They speak ${response.data[0].languages[0].name}.`;
+        imageContainer.appendChild(languagesInfo);
 
     }
-    getBelgium(); // it's return the object, just not what is in it.
+    getCountryInfo(); // it's return the object, just not what is in it.
 
 });
-
-// SHORTER VERSION WITH ASYNC.
-// searchButton.addEventListener("click", async ()=>{
-//     const getInfo = await axios.get("https://restcountries.eu/rest/v2/name/belgium");
-//
-//     console.log("Result:", getInfo.data)
-// });
 
 
 //DOM for inputField
 const inputField = document.getElementById("input-field");
-const query = inputField.value;
+
 
 // event listener keyup for input field
-// trying to get info based on Enter key event, gather information equal to country na,entered.
+// trying to get info based on Enter key event, gather information equal to country entered.
+
 inputField.addEventListener("keyup", (event)=>{
-    if (event.code === "Enter"){
-        async function getInfo(){
-            const response2 = await axios.get("https://restcountries.eu/rest/v2/name/belgium")
+    if (event.key === "Enter"){
+        async function getInfo() {
+            const input = inputField.value;
+            const query = await axios.get(`https://restcountries.eu/rest/v2/name/${input}`);
+            console.log(query);
         }
+        getInfo();
     }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// inputField.addEventListener("keyup", (event)=>{
+//     if (event.key === "Enter"){
+//         async function getInfo(){
+//             const query = inputField.value;
+//             const api = await axios.get("https://restcountries.eu/rest/v2/name/");
+//             const url = api + query;
+//             console.log(url)
+//         }
+//
+//     }
+//     getInfo();
+// })
+
+//remove text after each input text area
+
+// document.getElementById("input-field").value = "";
+
 
 
 
