@@ -30,8 +30,13 @@ button {
 
 h2 {
     font-size: 3rem;
+    text-align: center;
 }
 
 input {
     height: 4vh;
+}
+
+p {
+    text-align: justify;
 }
